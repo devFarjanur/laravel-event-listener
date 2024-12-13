@@ -2,7 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use App\Events\PostPublished;
 use App\Models\Post;
+use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Mail;
 
@@ -20,10 +22,7 @@ class PostController extends Controller
             'content' => $request->content
         ]);
 
-        Mail::raw("A new post titled ' {$post->title} ' has been published", function ($message) {
-            $message->to('farjanur15-2956@diu.edu.bd')
-                ->subject('New Post Published');
-        });
+        PostPublished::dispatch($post);
 
         return redirect()->back();
     }
